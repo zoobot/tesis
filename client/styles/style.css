@@ -1,0 +1,10 @@
+/*<!-- Created by Duncan on 12.28.2016 -->*/
+html, body{
+  display: table;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+body{
+  padding-top: 8em;
+}
