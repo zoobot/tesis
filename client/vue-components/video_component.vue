@@ -1,5 +1,6 @@
 <template>
     <div v-el="localVideo" id="localVideo">
+        <!--unsure about model here-->
         <video :model="localVideo" autoplay></video>
 
         <div>
@@ -10,10 +11,9 @@
     </div>
     <!--need to set remote videos to append to document to accomodate for multiple callers (maybe later feature?)-->
     <div v-el="remoteVideo" id="remoteVideo">
+        <!--unsure about model here-->
         <video v-model="remoteVideo" autoplay></video>
     </div>
-
-    <!--note to self: add adapter.js to cover prefixed classnames ie: peerRTC, userMedia, etc.-->
 </template>
 <style>
   body {
@@ -26,13 +26,13 @@
   }
 </style>
 <script>
+
   import Utils from '../js/utils.js'
   import Methods from '../js/webrtc.js'
 
   export default {
 
     created () {
-
 
       // Utils.fetchChannel((response) => {
       //   this.channel = response.body;
@@ -48,6 +48,7 @@
     },
 
     data() {
+
         return {
           userStreamOn: false,
           peerConnection: {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]},
@@ -55,7 +56,8 @@
           // remoteVideo: false,
           constraints: { audio: true, video: true },
           // this.ws: new WebSocket('ws://' + window.location.host + '/ws/' + this.channel);
-        };
+        }
+
     },
 
     // components: {
@@ -83,7 +85,7 @@
 
       },
 
-      gotStream(stream) => {
+      gotStream(stream) {
 
         var localVideo = vm.$$.localVideo;
 
@@ -97,57 +99,13 @@
 
       call () {
 
-      }
+      },
 
       gotMessageFromServer () {
 
       }
 
-      function start(isCaller) {
-        peerConnection = new RTCPeerConnection(peerConnectionConfig);
-        peerConnection.onicecandidate = gotIceCandidate;
-        peerConnection.onaddstream = gotRemoteStream;
-        peerConnection.addStream(localStream);
 
-        if(isCaller) {
-            peerConnection.createOffer(gotDescription, createOfferError);
-        }
-      }
-
-      function gotDescription(description) {
-          console.log('got description');
-          peerConnection.setLocalDescription(description, function () {
-              serverConnection.send(JSON.stringify({'sdp': description}));
-          }, function() {console.log('set description error')});
-      }
-
-      function gotIceCandidate(event) {
-          if(event.candidate != null) {
-              serverConnection.send(JSON.stringify({'ice': event.candidate}));
-          }
-      }
-
-      function gotRemoteStream(event) {
-          console.log("got remote stream");
-          remoteVideo.src = window.URL.createObjectURL(event.stream);
-      }
-
-      function createOfferError(error) {
-          console.log(error);
-      }
-
-      function gotMessageFromServer(message) {
-        if(!peerConnection) start(false);
-
-        var signal = JSON.parse(message.data);
-        if(signal.sdp) {
-            peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
-                peerConnection.createAnswer(gotDescription, createAnswerError);
-            });
-        } else if(signal.ice) {
-            peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
-        }
-      }
 
     }
 
