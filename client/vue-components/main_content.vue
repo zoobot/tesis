@@ -1,80 +1,95 @@
 <!-- Created by Duncan on 12.28.2016 -->
 <template>
   <div class="main-content">
+    <navbar></navbar>
+    <div>
     <ToolBar :word-count="count"></ToolBar>
     <!-- area to add live data as text is being added -->
     <div class="content-left">
+
       <p>This area is for live data about text</p>
       <p>To see tools hover over tools or far left on screen</p>
+      <VideoComponent id="video" :wsRTC="wsRTC" :ws="ws" :answer="answer"></VideoComponent>
     </div>
     <!-- end live data area -->
-    <!-- text feild -->
+    <!-- text field -->
     <div class="content-right">
       <!-- Markdown editor -->
       <!-- Doesn't really compile markdown yet -->
       <div id="editor">
-        <textarea :value="input"
-        id="content"
-        @input="update" @keyup.delete="wordCounter" @keyup.space="wordCounter" @keyup.enter="wordCounter(true)"></textarea>
+        <textarea id="content" :value="input" @input="update" @input.ws-send="wsSend" @keyup.delete="wordCounter" @keyup.space="wordCounter" @keyup.enter="wordCounter(true)"></textarea>
       </div>
       <!-- end editor -->
     </div>
-    <!-- end text feild -->
+    <!-- end text field -->
+  </div>
   </div>
 </template>
 
 <script>
+  import Navbar from './navbar.vue'
   import ToolBar from './tool_bar.vue'
   import Methods from '../js/main_content.js'
+  import VideoComponent from './video_component.vue'
   // HTTP calls ect.
   import Utils from '../js/utils.js'
+  import Chance from 'chance'
+  const chance = new Chance()
 
   export default {
     created() {
-      // Starts listening on page load
-      var channel, conn;
-      var content = $("#content");
-        // Use the vue-resource $http client to fetch data from the /tasks route
-      this.$http.get('/getUrl').then(function(response) {
-        console.log('getUrl datas!:', response);
-        channel = response;
-        console.log(channel)
-        conn = new WebSocket('ws://' + window.location.host + '/ws/' + channel);
-        console.log('conn',conn)
-        this.mychan = conn
-        // Textarea is editable only when socket is opened.
-        conn.onopen = function(e) {
-          console.log('onopen',e);
-          content.attr("disabled", false);
-        };
+      // get params from URL (if provided)
+      let c = this.$route.params.channel;
 
-        conn.onclose = function(e) {
-          console.log('onclose',e);
-          content.attr("disabled", true);
-        };
+      // set URI to params or generated 5 char unique.
+      let URI = c !== undefined && /^\w{5}$/.test(c) ? c : chance.word({length: 5});
 
-        // Whenever we receive a message, update textarea
-        conn.onmessage = function(e) {
-          console.log('in conn.onmessage',e.data)
-          if (e.data != content.val()) {
-            console.log('in if',e.data)
-            content.val(e.data);
-          }
-      //fetchChannel(channelSetup)
-    };
-        // this.onMessage(e);
+      // create websocket with unique address.
+      this.ws = new WebSocket(`wss://${window.location.host}/ws/${URI}`);
 
-      });
+      //create RTC websocket
+      this.wsRTC = new WebSocket(`wss://${window.location.host}/ws/${URI}rtc`);
+
+      // update URL display. I still think we can do this with router somehow :S
+      window.history.pushState(window.location.origin, '/', URI);
+
+      // Whenever we receive a message, update textarea
+      this.ws.onmessage = e => {
+        if (e.data !== this.input) {
+          this.input = e.data;
+          this.wordCounter();
+        }
+      }
+
+      // onMessage((data) => {
+      //   // Do something with data
+      //   this.whatever = data;
+      // })
+      // let onMessage = (cb) => {
+        // Whenever we receive a signal from the RTC websocket...
 
 
     },
-    data: {input: null, count: null},
-    mychan: null,
+
+    data() {
+      return {
+        // URI: c !== undefined && /^\w{5}$/.test(c) ? c : chance.word({length: 5}),
+        ws: null,
+        wsRTC: null,
+        answer:'',
+        input: '',
+        channel: '',
+        count: 0,
+        channel: ''
+      }
+    },
     components: {
-      ToolBar
+      ToolBar,
+      Navbar,
+      VideoComponent
     },
     // Methods are located in js directory
-    methods: Methods
+    methods: Methods,
   }
 </script>
 
