@@ -6,7 +6,7 @@
     <ToolBar :word-count="count"></ToolBar>
     <!-- area to add live data as text is being added -->
     <div class="content-left">
-      <VideoComponent id="video" :wsRTC="wsRTC" :saverURI="saverURI" :answer="answer"></VideoComponent>
+      <VideoComponent id="video" :wsRTC="wsRTC" :saverURI="saverURI"></VideoComponent>
       <!-- <ScreenCast id="screen" :wsRTC="wsRTC" :saverURI="saverURI"></ScreenCast> -->
     </div>
     <!-- end live data area -->
