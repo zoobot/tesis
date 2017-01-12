@@ -191,26 +191,6 @@
           }
       },
 
-      // downloader() {
-      //   this.theRecorder.stop();
-      //   this.localStream.getTracks().forEach(track => {track.stop()});
-
-      //   var blob = new Blob(this.recordedChuck, {type: "video/webm"})
-      //   console.log('blob', blob)
-      //   var url = URL.createObjectURL(blob)
-      //   console.log('url', url)
-      //   var a = document.createElement(a);
-      //   document.body.appendChild(a);
-      //   a.style = "display: none"
-      //   a.href = url;
-      //   a.download = 'test.webm';
-      //   a.click();
-
-
-      //   //settimeout needed for firefox
-      //   // setTimeout(function() {URL.revokeObjectURL(url);}, 100)
-      // },
-
       downloader() {
         this.theRecorder.stop();
         this.localStream.getTracks().forEach(track => { track.stop(); });
