@@ -5,7 +5,8 @@
 module.exports = {
 
   start() {
-    this.startCollab();
+    this.wsrtc.send(JSON.stringify({'type':'join'}));
+    this.wsrtc.send(JSON.stringify({'type': 'joinUp'}))
     //this tells the getUserMedia what data to grab and set in the MediaStream object that the method produces,
     //which is then used in the success callback on the MediaStream object that contains the media stream
     navigator.mediaDevices.getUserMedia({ audio: {
@@ -20,8 +21,7 @@ module.exports = {
   },
 
   startCollab()  {
-    this.wsrtc.send(JSON.stringify({'type':'join'}));
-    this.wsrtc.send(JSON.stringify({'type': 'joinUp'}))
+
   },
 
   call() {
@@ -45,7 +45,7 @@ module.exports = {
     this.videos.appendChild(localVideo);
     localVideo.src = URL.createObjectURL(this.localStream);
     localVideo.setAttribute("autoplay", true);
-    localVideo.setAttribute("muted", true);
+    // localVideo.setAttribute("muted", true);
     localVideo.setAttribute("id", this.localStream.id);
     // instantiate new peer connection
     this.pc = new RTCPeerConnection(this.peerConnectionConfig);

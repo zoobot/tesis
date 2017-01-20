@@ -4,8 +4,8 @@ import docsave from './docsave.js'
 import editor from '../js/editor.js'
 
 Vue.use(VueResource);
-
-const USER_URL = 'https://127.0.0.1:8443';
+// const USER_URL = 'https://127.0.0.1:8443';
+const USER_URL = `https://,${window.location.host},:8443`;
 const eValidate = require('email-validator');
 const crypto = require('crypto'),
       algorithm = 'aes-256-ctr',
@@ -16,7 +16,7 @@ Vue.use(VueResource);
 export default {
   // user object will let us check if the user is authenticate and is where user data will be stored.
   user: {
-    authenticated: false,
+    authenticated: true,
     data: {}
   },
   signup(context, creds, cb) {

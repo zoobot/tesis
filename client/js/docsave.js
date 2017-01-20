@@ -1,7 +1,8 @@
 import auth from './auth.js'
 import editor from '../js/editor.js'
 
-const USER_URL = 'https://127.0.0.1:8443';
+// const USER_URL = 'https://127.0.0.1:8443';
+const USER_URL = `https://,${window.location.host},:8443`;
 
 export default {
   docData: {

@@ -1,27 +1,25 @@
 <template>
   <div class="main-content">
     <navbar></navbar>
-
     <div>
     <!-- area to add live data as text is being added -->
-     <div class="content-left">
-     <div>
-      <videocomponent id="video" :wsrtc="wsrtc" :uri="uri"></videocomponent>
-     </div>
+      <div class="content-left">
 
-      <div class="doc-info">
-        <div>{{ count }} words</div>
-        <div>{{ time }} read</div>
+        <videocomponent id="video" :wsrtc="wsrtc" :uri="uri"></videocomponent>
+
+
+
+        <div class="doc-info" v-if="count > 0">
+          <div>{{ count }} words</div>
+          <div>{{ time }} read</div>
+        </div>
+
       </div>
-      <div class="audio">
-        <audiocomponent id="audio" ></audiocomponent>
+
+      <div class="content-right">
+        <div id="editor"></div>
       </div>
-      <div>
-        <statcomponent :quill="quill"></statcomponent>
-      </div>
-    </div>
-    <div class="content-right">
-      <div id="editor"></div>
+
     </div>
   </div>
 </template>
@@ -30,17 +28,15 @@
   import Navbar from './navbar.vue'
   import Methods from '../js/main_content.js'
   import Videocomponent from './video_component.vue'
-  import Audiocomponent from './audio_component.vue'
+  // import Utils from '../js/utils.js'
   import {textStats, docSubscribe} from '../js/editor.js'
   import sharedb from 'sharedb/lib/client'
   import richText from 'rich-text'
-  // import Quill from 'quill'
+  import Quill from 'quill'
   import Chance from 'chance'
   import auth from '../js/auth.js'
   import docsave from '../js/docsave.js'
   import editor from '../js/editor.js'
-  import statcomponent from './stat_component.vue'
-
   export default {
     created() {
       let chance = new Chance()
@@ -61,7 +57,7 @@
       sharedb.types.register(richText.type)
       let socket = new WebSocket(`ws://${window.location.hostname}:3000/${this.uri}`)
       const connection = new sharedb.Connection(socket)
-      // console.log(socket, this.wsrtc)
+      //console.log(socket, this.wsrtc)
       // console.log(socket, this.wsrtc)
       // For testing reconnection
       window.disconnect = function() {
@@ -75,10 +71,9 @@
       editor.doc = connection.get('docs', this.uri);
       // New quill
       editor.makeQuill();
-
-      editor.quillOn(this, editor.doc);
+      editor.quillOn(editor.doc);
       editor.docSubscribe(editor.quill, editor.doc);
-      this.quill = editor.quill
+      editor.changeQuill('');
     },
     data() {
       return {
@@ -91,15 +86,13 @@
         // Doc data stored in docsave
         docData: docsave.docData,
         time: '',
-        quill: '',
+        quill: editor.quill,
         uri: ''
       }
     },
     components: {
       Navbar,
-      Videocomponent,
-      Audiocomponent,
-      statcomponent
+      Videocomponent
     },
     // Methods are located in js directory
     methods: Methods

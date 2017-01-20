@@ -3,6 +3,10 @@
   <nav class="navbar navbar-fixed-top">
     <div class="left-nav">
     </div>
+    <div class="logo"><img src="/client/assets/images/tesis-icon.png" ></div>
+    <div class="audio">
+      <audiocomponent id="audio" ></audiocomponent>
+    </div>
     <div class="title" v-if="this.user.authenticated">
       <p> {{ docData.currentDoc.name || 'New' }} </p>
     </div>
@@ -53,6 +57,7 @@
   import docsave from '../js/docsave.js'
   import Signin from './signin.vue'
   import Signup from './signup.vue'
+  import Audiocomponent from './audio_component.vue'
   export default {
     created() {
     },
@@ -68,6 +73,7 @@
       }
     },
     components: {
+      Audiocomponent,
       Signin,
       Signup
     },
@@ -77,11 +83,18 @@
 </script>
 
 <style>
+  .logo img {
+    height:100px;
+    padding: 10px;
+    position: absolute;
+    left: 3px;
+    top:2px;
+  }
   .navbar{
     color: white;
     display: table;
-    background-color: rgb(24, 24, 24);
-    height: 8em;
+    background-color: rgb(64, 98, 126);
+    height: 7.5em;
     width: 100vw;
     border: transparent;
   }
@@ -107,7 +120,6 @@
     align-items: center;
     top: 2.25em;
     right: 2em;
-    background-color: rgb(0, 0, 0);
     cursor: pointer;
     width: 3em;
     height: 3em;

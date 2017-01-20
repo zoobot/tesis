@@ -2,39 +2,34 @@
   <div class="audioref" >
     <a @click="basketball()">
       <audio loop id="basketball" src="/client/assets/audio/Stomp-Basketballs.mp3"></audio>
-      <img src="/client/assets/images/basketball.svg" id="bballplay" />
+      <img src="/client/assets/images/basketball2.png" id="bballplay" />
       <img class="audioControl" src="https://i0.wp.com/www.rnningfool.com/wp-content/uploads/2014/07/pause_lead_flow.gif" id="pause" />
     </a>
 
     <a @click="fire()">
       <audio loop id="fire" src="/client/assets/audio/Campfire_sound_ambience.mp3"></audio>
-      <img src="/client/assets/images/fire.svg" id="fireplay" />
+      <img src="/client/assets/images/fire.png" id="fireplay" />
       <img class="audioControl" src="https://i0.wp.com/www.rnningfool.com/wp-content/uploads/2014/07/pause_lead_flow.gif" id="pause" />
     </a>
 
     <a @click="flute()">
-      <audio loop id="flute" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Hymne_delphique.ogg"></audio>
-      <img src="/client/assets/images/flute.svg" id="fluteplay" />
+      <audio loop id="flute" src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Whales_and_Dolphins_whale_nature_sounds_songs_nueva_esparta.ogg"></audio>
+      <img src="/client/assets/images/flute2.png" id="fluteplay" />
       <img class="audioControl" src="https://i0.wp.com/www.rnningfool.com/wp-content/uploads/2014/07/pause_lead_flow.gif" id="pause" />
     </a>
 
     <a @click="square()">
       <audio loop id="square" src="/client/assets/audio/White.mp3"></audio>
-      <img src="/client/assets/images/square.svg" id="squareplay" />
+      <img src="/client/assets/images/square.png" id="squareplay" />
       <img class="audioControl" src="https://i0.wp.com/www.rnningfool.com/wp-content/uploads/2014/07/pause_lead_flow.gif" id="pause" />
     </a>
 
     <a @click="forest()">
       <audio loop id="forest" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Calling_of_Cicads_on_Ko_Tao%2C_Thailand_1.ogg"></audio>
-      <img src="/client/assets/images/sin.svg" id="forestplay" />
+      <img src="/client/assets/images/sin2.png" id="forestplay" />
       <img class="audioControl" src="https://i0.wp.com/www.rnningfool.com/wp-content/uploads/2014/07/pause_lead_flow.gif" id="pause" />
     </a>
 
-    <a @click="eye()">
-      <audio loop id="eye" src="/client/assets/audio/Growth-Mindset-Hypnosis.mp3"></audio>
-      <img src="/client/assets/images/hypnosis.svg" id="eyeplay" />
-      <img class="audioControl"  id="pause" />
-    </a>
 </div>
 </template>
 
@@ -112,12 +107,23 @@ export default {
 
 <style>
 .audioref img {
-    width: 15%;
+  height:50px;
 }
 .audioref {
-  width: 100%;
-  background-color: #eeeaea;
+  position: absolute;
+  left: 300px;
+  top: 20px;
+  padding: 10px;
+  text-align: left;
+  /*background-color: #eeeaea;*/
 }
+.audioref audio {
+
+}
+
+
+
+
 #pause {
     display: none;
 }
