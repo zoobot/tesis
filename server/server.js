@@ -1,4 +1,6 @@
-const http = require('http')
+const https = require('https')
+const tls = require('tls')
+const fs = require('fs')
 const express = require('express')
 const ShareDB = require('sharedb')
 const Logger = require('sharedb-logger')
@@ -7,6 +9,12 @@ const richText = require('rich-text')
 const WebSocket = require('ws')
 const WebSocketJSONStream = require('websocket-json-stream')
 const bodyParser = require('body-parser')
+
+
+var options = {
+  cert : fs.readFileSync("./cert.pem"),
+  key  : fs.readFileSync("./key.pem")
+};
 
 ShareDB.types.register(richText.type)
 const backend = new ShareDB({db})
@@ -21,12 +29,12 @@ function startServer() {
   const router = require('./routes')(app, express)
   app.use('/', router)
 
-  const server = http.createServer(app);
+  const server = https.createServer(options, app);
 
   // Connects any incoming WebSocket connection to ShareDB
   let wss = new WebSocket.Server({server: server});
-  wss.on('connection', function(ws, req) {
-    let stream = new WebSocketJSONStream(ws)
+  wss.on('connection', function(wss, req) {
+    let stream = new WebSocketJSONStream(wss)
     backend.listen(stream)
   })
 
